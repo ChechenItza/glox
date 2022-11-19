@@ -1,11 +1,10 @@
-package debug
+package main
 
 import (
 	"fmt"
-	"interpreter-go/chunk"
 )
 
-func Disassemble(c *chunk.Chunk, name string) {
+func Disassemble(c *Chunk, name string) {
 	fmt.Printf("== %s ==\n", name)
 
 	for offset := 0; offset < len(c.Code); {
@@ -13,7 +12,7 @@ func Disassemble(c *chunk.Chunk, name string) {
 	}
 }
 
-func DisassembleInstruction(c *chunk.Chunk, offset int) int {
+func DisassembleInstruction(c *Chunk, offset int) int {
 	fmt.Printf("%04d ", offset)
 
 	if offset > 0 && c.Lines.Get(offset) == c.Lines.Get(offset-1) {
@@ -24,11 +23,11 @@ func DisassembleInstruction(c *chunk.Chunk, offset int) int {
 
 	instruction := c.Code[offset]
 	switch instruction {
-	case chunk.OP_RETURN:
+	case OP_RETURN:
 		return simpleInstruction("OP_RETURN", offset)
-	case chunk.OP_CONSTANT:
+	case OP_CONSTANT:
 		return constantInstruction("OP_CONSTANT", c, offset)
-	case chunk.OP_CONSTANT_LONG:
+	case OP_CONSTANT_LONG:
 		return longConstantInstruction("OP_CONSTANT_LONG", c, offset)
 	default:
 		fmt.Printf("Unknown opcode %d\n", instruction)

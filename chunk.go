@@ -1,9 +1,7 @@
-package chunk
+package main
 
 import (
 	"encoding/binary"
-	"interpreter-go/line"
-	"interpreter-go/value"
 )
 
 const (
@@ -14,8 +12,8 @@ const (
 
 type Chunk struct {
 	Code      []byte
-	Constants value.ValueArray
-	Lines     line.RleLines
+	Constants ValueArray
+	Lines     RleLines
 }
 
 func ConcatLongConstant(c ...byte) uint32 {

@@ -1,10 +1,7 @@
-package vm
+package main
 
 import (
 	"fmt"
-	"interpreter-go/chunk"
-	"interpreter-go/debug"
-	"interpreter-go/value"
 )
 
 type Result int
@@ -16,7 +13,7 @@ const (
 )
 
 type Vm struct {
-	chunk *chunk.Chunk
+	chunk *Chunk
 	pc    int // TODO: use unsafe pointer arithmetics
 }
 
@@ -24,7 +21,7 @@ func NewVm() Vm {
 	return Vm{}
 }
 
-func (vm *Vm) Interpret(chunk *chunk.Chunk) Result {
+func (vm *Vm) Interpret(chunk *Chunk) Result {
 	vm.chunk = chunk
 	vm.pc = 0
 	return vm.run()
@@ -32,17 +29,17 @@ func (vm *Vm) Interpret(chunk *chunk.Chunk) Result {
 
 func (vm *Vm) run() Result {
 	for {
-		debug.DisassembleInstruction(vm.chunk, vm.pc)
+		DisassembleInstruction(vm.chunk, vm.pc)
 
 		instruction := readByte(vm)
 		switch instruction {
-		case chunk.OP_RETURN:
+		case OP_RETURN:
 			return INTERPRET_OK
-		case chunk.OP_CONSTANT:
+		case OP_CONSTANT:
 			constant := readConstant(vm)
 			constant.Print()
 			fmt.Printf("\n")
-		case chunk.OP_CONSTANT_LONG:
+		case OP_CONSTANT_LONG:
 			constant := readLongConstant(vm)
 			constant.Print()
 			fmt.Printf("\n")
@@ -61,12 +58,12 @@ func readByte(vm *Vm) byte {
 	return b
 }
 
-func readConstant(vm *Vm) value.Value {
+func readConstant(vm *Vm) Value {
 	op := readByte(vm)
 	return vm.chunk.Constants[op]
 }
 
-func readLongConstant(vm *Vm) value.Value {
-	op := chunk.ConcatLongConstant(readByte(vm), readByte(vm), readByte(vm))
+func readLongConstant(vm *Vm) Value {
+	op := ConcatLongConstant(readByte(vm), readByte(vm), readByte(vm))
 	return vm.chunk.Constants[op]
 }
