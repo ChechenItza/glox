@@ -1,4 +1,4 @@
-package main
+package interpreter
 
 // run-length encoded
 type RleLines []int
