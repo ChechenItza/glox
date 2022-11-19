@@ -3,8 +3,10 @@ package main
 import (
 	"encoding/binary"
 	c "interpreter-go/chunk"
+	"interpreter-go/debug"
 	"interpreter-go/line"
 	"interpreter-go/value"
+	vm2 "interpreter-go/vm"
 )
 
 func main() {
@@ -14,13 +16,15 @@ func main() {
 	}
 
 	bs := make([]byte, 4)
-	binary.LittleEndian.PutUint32(bs, 300)
+	binary.BigEndian.PutUint32(bs, 300)
 
-	chunk := c.Chunk{
-		Code: []byte{ c.OP_RETURN, c.OP_CONSTANT, 0, c.OP_CONSTANT_LONG, bs[2], bs[1], bs[0] },
+	c := c.Chunk{
+		Code:      []byte{c.OP_CONSTANT, 1, c.OP_CONSTANT_LONG, bs[1], bs[2], bs[3], c.OP_RETURN},
 		Constants: va,
-		Lines: line.RleLines{ 3, 123, 4, 25 },
+		Lines:     line.RleLines{2, 123, 5, 25},
 	}
-	chunk.Disassemble("test chunk")
-}
+	debug.Disassemble(&c, "test chunk")
 
+	vm := vm2.NewVm()
+	vm.Interpret(&c)
+}
