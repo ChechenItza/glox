@@ -12,7 +12,7 @@ const (
 
 type Chunk struct {
 	Code      []byte
-	Constants ValueArray
+	Constants []Value
 	Lines     RleLines
 }
 

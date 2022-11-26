@@ -6,9 +6,9 @@ import (
 )
 
 func main() {
-	va := interpreter.ValueArray{}
+	va := make([]interpreter.Value, 512)
 	for i := 0; i < 512; i++ {
-		va = append(va, interpreter.Value(i))
+		va[i] = interpreter.Value(i)
 	}
 
 	bs := make([]byte, 4)
