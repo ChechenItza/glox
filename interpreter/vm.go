@@ -47,10 +47,6 @@ func (vm *Vm) run() Result {
 	}
 }
 
-func (vm *Vm) free() {
-
-}
-
 func readByte(vm *Vm) byte {
 	b := vm.chunk.Code[vm.pc]
 	vm.pc++
